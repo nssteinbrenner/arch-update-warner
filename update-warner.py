@@ -27,11 +27,13 @@ with open('config', 'r') as f:
             targetline = line.strip().split(' ')
             botpassword = targetline[1]
 
+
 def addArchived(archive, title):
     with open(archive, 'a') as stored:
         stored.write(title)
         stored.write('\n')
-                                                                                                                     
+
+
 def checkArchived(title, archive):
     with open(archive, 'r') as f:
         lines = f.readlines()
@@ -39,6 +41,7 @@ def checkArchived(title, archive):
             if line.strip() == title:
                 return False
     return True
+
 
 def notifyMe(msg, subj, toaddr, fromaddr, password):
     message = MIMEMultipart()
@@ -54,6 +57,7 @@ def notifyMe(msg, subj, toaddr, fromaddr, password):
     text = message.as_string()
     server.sendmail(fromaddr, toaddr, text)
 
+
 def getpkgs(pkglist):
     with open(pkglist, 'r') as f:
         packages = f.readlines()
@@ -61,9 +65,11 @@ def getpkgs(pkglist):
             packages[i] = line.strip()
     return packages
 
+
 def getposts(feed):
     updatefeed = feedparser.parse(feed)
     return updatefeed.entries
+
 
 def checkpackages(packages, posts, archive):
     for post in posts:
@@ -76,6 +82,7 @@ def checkpackages(packages, posts, archive):
                     subj = post.title
                     msg = f'{post.link}\n\n{post.description}'
                     notifyMe(msg, subj, toaddr, fromaddr, botpassword)
+
 
 packages = getpkgs(pkglist)
 posts = getposts(feed)
